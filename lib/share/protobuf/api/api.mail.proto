@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package Api.mail;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Mail                        *
+ *                                      *
+ ****************************************/
+
+message Mail {
+
+    enum MailStatus {
+        NULL = 0;
+        NEW = 1;
+        READ = 2;
+        RECEIVED = 3;
+    }
+
+    uint32 uid = 1;
+    string title = 2;          // 标题
+    string sender = 3;         // 发送者
+    uint32 sendTime = 4;       // 发送时间
+    string content = 5;        // 内容
+    repeated Reward attachment = 6;     // 附件
+    MailStatus status = 7;
+}
+
+// 打开邮箱界面
+message initList {
+    message Request {}
+    message Response {
+        Error error = 1;
+        uint32 totalPage = 3;
+        repeated Mail mailList = 4;
+    }
+}
+
+// 邮箱翻页
+message queryPage {
+    message Request {
+        uint32 page = 1;
+    }
+    message Response {
+        Error error = 1;
+        repeated Mail mailList = 2;
+    }
+}
+
+// 领取邮件附件
+message receiveAttachment {
+    message Request {
+        uint32 mailUid = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 mailUid = 2;
+    }
+}
+
+// 阅读邮件
+message readMail {
+    message Request {
+        uint32 mailUid = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+// 邮箱上线包
+message onlineInfo {
+    message Notify {
+        uint32 newMailCount = 1;
+    }
+}
+// 更新包
+message updateInfo {
+    message Notify {
+        uint32 newMailCount = 1;
+    }
+}

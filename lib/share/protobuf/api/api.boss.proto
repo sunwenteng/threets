@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package Api.boss;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Boss                        *
+ *                                      *
+ ****************************************/
+
+message initInfo {
+    message Request {}
+    message Response {
+        Error error = 1;
+        uint32 rank = 2;
+        uint32 score = 3;
+    }
+}
+
+message startFight {
+    message Request {}
+    message Response {
+        Error error = 1;
+        string randomSeed = 2;         // 随机种子
+        repeated FightLoot fightLootArray = 3;  // 战斗掉落随机结果
+        uint32 leftSlay = 4;           // 剩余怒气值
+        uint32 bossEnergyNextTime = 5; // 下一点boss能量回复剩余时间
+    }
+}
+
+message finishFight {
+    message Request {
+        uint32 result = 1;     // 0: failed, 1: success, 2: flee
+        uint32 totalRound = 2;     // 总共回合
+        repeated uint32 useSlayRound = 3;   // 使用怒气回合列表
+        repeated uint32 restoreRound = 4;   // 买活回合数列表
+        repeated uint32 specialRound = 5;   // 买大招回合数
+    }
+    message Response {
+        Error error = 1;
+        uint32 damageDone = 2;
+        uint32 totalDamage = 3;
+        uint32 damageRank = 4;
+        uint32 killCount = 5;
+        uint32 milestoneRewardID = 6;  // 非0表示有奖励,boss_milestonedb.ID
+    }
+}
+
+message rankList {
+    message Request {
+        uint32 page = 1;   // page = 0 表示请求自己所在的那一页
+    }
+    message Response {
+        Error error = 1;
+        repeated LeaderboardItem roles = 2;
+        uint32 currentPage  = 3;
+        uint32 totalPage  = 4;
+    }
+}
+
+message selectTeam {
+    message Request {
+        FightTeam team  = 1;  //英雄队伍
+    }
+    message Response {
+        Error error = 1;
+        repeated FightHero hireFriendList = 6;
+    }
+}
+
+enum BOSS_PROGRESS {
+    NOT_START = 0;
+    START = 1;
+    RESULT_SORTING = 2;
+    BOSS_END = 3;
+}
+
+// boss上线包
+message initBossInfo {
+    message Notify {
+        BOSS_PROGRESS bossProgress = 1;
+        uint32 bossID = 2;
+        uint32 bossLevel = 3;
+        bool isActive = 4;
+        uint32 bossLeftActiveTime = 5; // 激活剩余时间，之后会隐藏，isActive=true有效
+        uint32 bossTotalDuration = 6;  // boss持续时间
+        uint32 leftHealth = 7;
+        uint32 killCount = 8;
+        LastBossReward lastBossReward = 9;
+        uint32 bossEnergyNextTime = 10;// 下一点boss能量回复剩余时间
+        FightTeam team = 11;
+    }
+}
+
+// boss击杀列表上线包
+message initKillList {
+    message Notify {
+        repeated uint32 bossList = 1;
+    }
+}
+
+// 新boss在线通知包
+message newBossInfo {
+    message Notify {
+        uint32 bossID = 1;                                 // required
+        BOSS_PROGRESS bossProgress = 2;                    // required
+        uint32 bossLevel = 3 [default = 1];
+        bool isActive = 4 [default = true];
+        uint32 bossLeftActiveTime = 5 [default = 0];
+        uint32 bossTotalDuration = 6 [default = 0];
+        uint32 leftHealth = 7;                             // required
+        uint32 killCount = 8 [default = 0];
+        LastBossReward lastBossReward = 9;
+    }
+}

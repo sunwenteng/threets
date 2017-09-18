@@ -1,0 +1,174 @@
+syntax = "proto3";
+
+package Api.friend;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Friend                      *
+ *                                      *
+ ****************************************/
+
+// 好友列表
+message initFriend {
+    message Request {
+        bool isBackground = 1;     // 是否是后台发送
+    }
+    message Response {
+        Error error = 1;
+        uint32 friendCount = 2;
+        uint32 applicationCount = 3;
+        repeated FriendInfo friendList = 4;
+        bool isBackground = 5;     // 是否是后台发送
+    }
+}
+
+// 申请好友
+message applyForFriend {
+    message Request {
+        string friendCode = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+// 处理申请
+message handleApplication {
+    message Request {
+        uint32 friendId = 1;
+        enum TYPE {
+            NULL = 0;
+            ACCEPT = 1;
+            REJECT = 2;
+        }
+        TYPE type = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+// 查看好友详细信息
+message seeProfile {
+    message Request {
+        uint32 friendId = 1;
+    }
+    message Response {
+        Error error = 1;
+        RoleProfile profile = 2;
+    }
+}
+
+// 删除好友
+message delFriend {
+    message Request {
+        uint32 friendId = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+// 领取加好友奖励
+message gainReward {
+    message Request {
+        uint32 ID = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 ID = 2;
+    }
+}
+
+// 获取部分好友信息
+message fetchPartFriend {
+    message Request {
+        uint32 startIndex = 1; // start with 0
+        uint32 size = 2;       // 长度
+    }
+    message Response {
+        Error error = 1;
+        repeated FriendInfo friendList = 2; // friendList.length <= size
+    }
+}
+
+// 与好友切磋：开始战斗
+message startFight {
+    message Request {
+        uint32 friendId = 1;
+    }
+    message Response {
+        Error error = 1;
+        repeated FightHero heros = 2;
+        string randomSeed = 3; // 随机种子
+    }
+}
+
+// 与好友切磋：结束战斗
+message finishFight {
+    message Request {
+        uint32 result = 1;     // 0: failed, 1: success, 2: flee
+        uint32 totalRound = 2;     // 总共回合
+        repeated uint32 useSlayRound = 3;   // 使用怒气回合列表
+    }
+    message Response {
+        Error error = 1;
+        uint32 earned = 2;
+        uint32 winTimesScore = 3;
+        uint32 revengeScore = 4;
+        uint32 totalScore = 5;
+        uint32 winTimesRewardGet = 6;
+        uint32 scoreRewardGet = 7;
+    }
+}
+
+// 好友雇佣信息
+message initHireInfo {
+    message Request {}
+    message Response {
+        Error error = 1;
+        uint32 haveHiredCount = 2;
+        uint32 coolDown = 3;
+        repeated uint32 allHiredFriendList = 4;
+        uint32 purchaseCount = 5;      // 购买的雇佣次数
+    }
+}
+
+// 购买好友雇佣次数
+message purchaseHireCount {
+    message Request {}
+    message Response {
+        Error error = 1;
+        uint32 purchaseCount = 2;      // 购买的雇佣次数
+    }
+}
+
+// 主推：新的好友申请
+message newFriendApplication {
+    message Notify {
+        uint32 applicationCount = 1;
+    }
+}
+
+message updateHireInfo {
+    message Notify {
+        uint32 haveHiredCount = 1;
+        uint32 coolDown = 2;
+        repeated uint32 newHiredFriendList = 3;
+    }
+}
+
+message initInfo {
+    message Notify {
+        uint32 referFriendCount = 1;
+        repeated uint32 gainedIDList = 2;
+    }
+}
+
+message updateInfo {
+    message Notify {
+        uint32 referFriendCount = 1;
+    }
+}

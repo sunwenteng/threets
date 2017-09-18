@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package Api.quest;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Quest                       *
+ *                                      *
+ ****************************************/
+
+
+// 阅读任务
+message readQuest {
+    message Request {
+        uint32 ID = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 ID = 2;
+    }
+}
+
+// 完成任务
+message completeQuest {
+    message Request {
+        uint32 ID = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 ID = 2;
+    }
+}
+
+message initQuest {
+    message Notify {
+        repeated Quest quest = 1;
+    }
+}
+
+message updateQuest {
+    message Notify {
+        repeated QuestUpdate questUpdate = 1;
+    }
+}

@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package Api.gm;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          GM                          *
+ *                                      *
+ ****************************************/
+
+// 角色使用GM指令
+// add equip [short id] [count]
+// add [long id] [count]
+message useCommand {
+    message Request {
+        string command = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+
+message gmCommandList {
+    message Notify {
+        repeated GMCommand gmCommands = 1;
+    }
+}
+
+message GMCommand {
+    string cmd = 1;
+    string alias = 2;
+    string description = 3;
+
+    message Param {
+        string name = 1;
+        string type = 2;
+        string description = 3;
+        uint32 min = 4;
+        uint32 max = 5;
+        repeated string tableColumn = 6;    // 依赖列
+        repeated string enumeration = 7;    // 枚举列表
+    }
+    repeated Param fixed = 4;
+    repeated Param ext = 5;
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package Rpc.boss;
+
+/****************************************
+ *                                      *
+ *          Boss                        *
+ *                                      *
+ ****************************************/
+
+message pullWorldBoss {
+    message Request {}
+    message Response {
+        Error error = 1;
+        WorldBoss worldBoss = 2;
+    }
+}

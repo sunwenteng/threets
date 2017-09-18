@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package Api.battle;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Battle                      *
+ *                                      *
+ ****************************************/
+
+
+message fightStart {
+    message Request {}
+    message Response {
+        Error error = 1;
+        string randomSeed = 2; // 随机种子
+        repeated FightLoot fightLootArray = 3;  // 战斗掉落随机结果
+        uint32 leftSlay = 4;       // 剩余怒气值
+    }
+}
+
+message fightFinish {
+    message Request {
+        uint32 result = 1;     // 0: failed, 1: success, 2: flee
+        uint32 totalRound = 2;     // 总共回合
+        repeated uint32 useSlayRound = 3;   // 使用怒气回合列表
+        repeated uint32 restoreRound = 4;   // 买活回合数列表
+        repeated uint32 specialRound = 5;   // 买大招回合数
+    }
+    message Response {
+        Error error = 1;
+        uint32 hasFinishedWave = 2;// 已完成战斗波次
+        uint32 monsterGroupID = 3; // 怪物组ID: stage_battle
+        uint32 rightDeathCount = 4;// 已死亡英雄数量
+        bool hasBossActive = 5;    // 有boss激活
+    }
+}
+
+message dungeonStart {
+    message Request {
+        uint32 stageID = 1;
+        FightTeam team = 2;        // 如果是继续上场战斗则不需要发送，回包中服务器给team
+    }
+    message Response {
+        Error error = 1;
+        uint32 stageID = 2;        // 当前进度，关卡显示为正在进行的关卡战斗
+        FightTeam team = 3;
+        uint32 hasFinishedWave = 4;// 已完成战斗波次
+        uint32 monsterGroupID = 5; // 怪物组ID: stage_battle
+        repeated FightHero hireFriendList = 6;
+        uint32 rightDeathCount = 7;// 已死亡英雄数量
+    }
+}
+
+message dungeonFinish {
+    message Request {}
+    message Response {
+        Error error = 1;
+        uint32 exp = 2;            // 通关奖励经验
+        uint32 completeHighestStageID = 3;
+    }
+}
+
+message abandonProcess {
+    message Request {}
+    message Response {
+        Error error = 1;
+    }
+}
+
+message recoverHp {
+    message Request {
+        uint32 heroUid = 1;
+        uint32 useResID = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message restoreHealth {
+    message Request {}
+    message Response {
+        Error error = 1;
+    }
+}
+
+message useSpecial {
+    message Request {}
+    message Response {
+        Error error = 1;
+    }
+}

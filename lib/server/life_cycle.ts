@@ -1,0 +1,8 @@
+
+class LifeCycle {
+
+
+
+}
+
+export = LifeCycle;

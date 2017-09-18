@@ -1,0 +1,60 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "node/node.d.ts": {
+      "commit": "6b19a967eff47c4d6eaf56c573ea4b8f0fc9c487"
+    },
+    "log4js/log4js.d.ts": {
+      "commit": "6b19a967eff47c4d6eaf56c573ea4b8f0fc9c487"
+    },
+    "mkdirp/mkdirp.d.ts": {
+      "commit": "6b19a967eff47c4d6eaf56c573ea4b8f0fc9c487"
+    },
+    "mysql/mysql.d.ts": {
+      "commit": "6b19a967eff47c4d6eaf56c573ea4b8f0fc9c487"
+    },
+    "protobufjs/protobufjs.d.ts": {
+      "commit": "3a666d1bff92e944488c25599ec56a4937c17c4e"
+    },
+    "express/express.d.ts": {
+      "commit": "25da006de5de3d2e31252fdc988296c7c212f231"
+    },
+    "async/async.d.ts": {
+      "commit": "00e7f3fede5f2df55b56c72f40a144824f0f0bfa"
+    },
+    "source-map-support/source-map-support.d.ts": {
+      "commit": "00e7f3fede5f2df55b56c72f40a144824f0f0bfa"
+    },
+    "redis/redis.d.ts": {
+      "commit": "002a9a96b116bd3f9053ee1afa02c03636ffebb5"
+    },
+    "tar/tar.d.ts": {
+      "commit": "af81415504b4edce8dac8446d96857f8018c6e9f"
+    },
+    "ncp/ncp.d.ts": {
+      "commit": "e5de5c4daf8cdc33ed60704cd6e8021c99a89f92"
+    },
+    "commander/commander.d.ts": {
+      "commit": "a39e8c409e7a56d3fb5842b3bbbf5357b5f1b752"
+    },
+    "ip/ip.d.ts": {
+      "commit": "dade4414712ce84e3c63393f1aae407e9e7e6af7"
+    },
+    "semver/semver.d.ts": {
+      "commit": "dade4414712ce84e3c63393f1aae407e9e7e6af7"
+    },
+    "js-yaml/js-yaml.d.ts": {
+      "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
+    },
+    "consul/consul.d.ts": {
+      "commit": "e0abafb1a6ff652f7ff967120e312d5c1916eaef"
+    },
+    "uuid/UUID.d.ts": {
+      "commit": "edb64e4a35896510ce02b93c0bca5ec3878db738"
+    }
+  }
+}

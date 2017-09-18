@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package Api.achievement;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Achievement                 *
+ *                                      *
+ ****************************************/
+
+enum Sundry {
+    NULL = 0;
+    ACHIEVEMENT_TITLE = 1;      // 成就称号
+}
+
+message equipTitle {
+    message Request {
+        uint32 achievementID = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message readAchievement {
+    message Request {
+        uint32 achievementID = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message initAchievement {
+    message Notify {
+        repeated AchievementProgress achProgress = 1;
+    }
+}
+
+message updateAchievement {
+    message Notify {
+        repeated AchievementProgress achProgress = 1;
+    }
+}

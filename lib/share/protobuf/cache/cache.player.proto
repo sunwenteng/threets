@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package Cache.Player;
+
+import "model/model.hero.proto";
+import "cache/cache.hero.proto";
+
+message Basic {
+	string name = 1;
+	uint32 level = 2;
+	uint32 achievementId = 3;
+	uint32 lastLogin = 9;
+	uint32 lastLogout = 10;
+}
+
+message MainHero {
+	message Suite {
+		Model.Hero.Suite suite = 1;
+		uint32 attack = 3;
+		uint32 defence = 4;
+	}
+
+    Model.Hero.Avatar avatar = 1;
+
+	Suite dungeon = 11;
+	Suite arena = 12;
+	Suite boss = 13;
+	Suite trial = 14;
+	Suite raid = 15;
+}
+
+// 公会中绑定个人的字段
+message Guild {
+	uint32 guildId = 1;
+	uint32 hierarchy = 3;
+	uint32 contribute = 4;
+}
+

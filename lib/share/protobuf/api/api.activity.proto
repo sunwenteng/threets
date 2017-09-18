@@ -1,0 +1,303 @@
+syntax = "proto3";
+
+package Api.activity;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Activity                    *
+ *                                      *
+ ****************************************/
+
+enum ACTIVITY_TYPE {
+    NULL = 0;
+    LOGIN_GIFT = 1;         // 登录赠送
+    DIAMOND_CONSUME = 2;    // 累计消耗赠送(同一时间：唯一不重复)
+    SHADOW_CHEST = 3;       // 开特定数量宝箱必送
+    FLOURISHING_CHEST = 4;  // 阶梯宝箱
+    CRAFT = 5;              // 限时打造
+    LIMIT_QUEST = 6;        // 限时任务
+    DISCOUNT = 7;           // 打折
+    COMMON_REDIRECT = 8;    // 通用跳转
+    FLOURISHING_SHOP = 9;   // 阶梯商店
+}
+
+message Activity {
+    uint32 activityId = 1;
+    ACTIVITY_TYPE activityType = 2;
+    uint32 leftTime = 3;
+    uint32 lastUpdateTime = 4;
+    uint32 resourceVersion = 5;
+    string title = 6;
+    uint32 endTime = 7;
+    string picture = 8;
+}
+
+message initInfo {
+    message Notify {
+        repeated Activity activities = 1;
+    }
+}
+
+message updateActivity {
+    message Notify {
+        repeated Activity updateActivities = 1;
+    }
+}
+
+message deleteActivity {
+    message Notify {
+        repeated uint32 deleteActivitiesId = 1;
+    }
+}
+
+// 请求活动基础数据
+message queryInfo {
+    message Request {
+        repeated uint32 activityIdList= 1;
+    }
+    message Response {
+        Error error = 1;
+        repeated Activity activities = 2;
+        repeated uint32 activityIdList= 3;
+    }
+}
+
+// 登录礼包活动
+// 这条协议会在cmd_sc_role_online之前发送
+message loginGift {
+    message Notify {
+        message LoginGift {
+            uint32 activityId = 1;
+            repeated Reward reward = 2;
+        }
+        repeated LoginGift giftList = 1;
+    }
+}
+
+// 累计消耗活动
+message ConsumeInfo {
+    uint32 requireCount = 1;
+    uint32 resID = 2;
+    uint32 resCount = 3;
+}
+
+message diamondConsumeReward {
+    message Notify {
+        repeated ConsumeInfo rewardList = 1;
+    }
+}
+
+message initDiamondConsume {
+    message Request {
+        uint32 activityId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 totalCount = 2;
+        repeated ConsumeInfo consumeList = 3;
+    }
+}
+
+// 开特定数量宝箱必送
+message ShadowChest {
+    uint32 chestCount = 1;     // 一次性购买的宝箱数量
+    uint32 price = 2;
+    repeated Reward reward = 3;         // 额外赠送奖励
+}
+
+message initShadowChest {
+    message Request {
+        uint32 activityId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 activityId = 2;
+        repeated ShadowChest chestList = 3;
+        repeated uint32 showRewardList = 4; // 展示的掉落奖励
+        string chanceStar = 5;
+    }
+}
+
+message openShadowChest {
+    message Request {
+        uint32 activityId = 1;
+        uint32 openCount = 2;
+    }
+    message Response {
+        Error error = 1;
+        uint32 activityId = 2;
+        repeated Reward reward = 3;
+    }
+}
+
+// 阶梯宝箱
+message FlourishingChest {
+    uint32 chestId = 1;
+    uint32 chance = 2;
+    string icon = 3;
+    uint32 lootCount = 4;
+    uint32 price = 5;
+}
+
+message initFlourishingChest {
+    message Request {
+        uint32 activityId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 activityId = 2;
+        repeated FlourishingChest chestList = 3;
+        repeated uint32 showRewardList = 4;         // 展示的掉落奖励
+        string chanceStar = 5;            // 星级描述
+        uint32 haveBoughtCount = 6;        // 已购买数量
+        uint32 chanceBonusId = 7;          // 奖励倍数ID
+    }
+}
+
+message openFlourishingChest {
+    message Request {
+        uint32 activityId = 1;
+        uint32 chestId = 2;
+    }
+    message Response {
+        Error error = 1;
+        uint32 activityId = 2;
+        repeated Reward reward = 3;
+        uint32 haveBoughtCount = 4;
+    }
+}
+
+// 限时打造
+message CraftRequire {
+    uint32 armorID = 1;
+    uint32 requireCount = 2;
+}
+
+message initCraft {
+    message Request {
+        uint32 activityId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 activityId = 2;
+        repeated CraftRequire craftList = 3;
+        repeated Reward reward = 4;
+
+        enum CRAFT_REWARD_STATUS {
+            NOT_EARN = 0;
+            HAS_EARN = 1;
+        }
+        CRAFT_REWARD_STATUS redeemStatus = 5;
+    }
+}
+
+message redeemCraftReward {
+    message Request {
+        uint32 activityId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 activityId = 2;
+    }
+}
+
+// 打折活动
+message initDiscount {
+    message Request {
+        uint32 activityId = 1;
+    }
+    message Response {
+        Error error = 1;
+        enum DiscountType {
+            NULL = 0;
+            ARENA_ENERGY = 1;
+            BOSS_ENERGY = 2;
+        }
+        uint32 activityId = 2;
+        DiscountType discountType = 3;
+        uint32 discount = 4;   // 百分比数值
+    }
+}
+
+// 通用跳转
+message initRedirect {
+    message Request {
+        uint32 activityId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 activityId = 2;
+        string internalRedirect = 3;
+        string externalRedirect = 4;
+    }
+}
+
+// 阶梯商店
+message FlourishingShopBracket {
+
+    enum Status {
+        NULL = 0;
+        HANDLING_ORDER = 1;
+        CAN_GAIN = 2;
+        HAVE_GAINED = 3;
+    }
+
+    string title = 1;
+    uint32 productID = 2;
+    uint32 leftTime = 3;
+    repeated Reward reward = 4;
+    Status status = 5;
+}
+
+message initFlourishingShop {
+    message Request {
+        uint32 activityId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 activityId = 2;
+        FlourishingShopBracket currentBracket = 3; // null: 表示已没有后续购买选项
+        uint32 bracketIndex = 4;       // 当前档下标 (从1开始)
+        uint32 bracketCount = 5;       // 总档数
+    }
+}
+
+message buyFlourishingShop {
+    message Request {
+        uint32 activityId = 1;
+        uint32 payID = 2;
+    }
+    message Response {
+        Error error = 1;
+        uint32 activityId = 2;
+    }
+}
+
+message gainFlourishingBracket {
+    message Request {
+        uint32 activityId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 activityId = 2;
+        repeated Reward reward = 3;
+        FlourishingShopBracket nextBracket = 4;
+        uint32 bracketIndex = 5;       // 下一档下标 (从1开始，nextBracket为null时无效)
+    }
+}
+
+message currentFlourishingShopBracket {
+    message Notify {
+        uint32 activityId = 1;
+        FlourishingShopBracket currentBracket = 2;
+    }
+}
+
+message flourishingShopOnline {
+    message Notify {
+        uint32 expiredActivityId = 1;
+        FlourishingShopBracket expiredBracket = 3;
+    }
+}

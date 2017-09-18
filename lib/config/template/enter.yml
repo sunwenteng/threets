@@ -1,0 +1,28 @@
+region:
+  name: intranet-beta
+  test: true
+work:
+  rootPath: /home/nigel/region/test/login
+  configPath: /home/nigel/region/test/data
+  logLevel: INFO
+mode:
+  type: Pseudo-Distributed # Standalone, Pseudo-Distributed, Fully-Distributed
+  handler:
+    - login
+  service:
+database:
+  - name: db.login
+    hostname: 172.16.1.11
+    user: root
+    password: root
+    database: dh_test
+    connectionLimit: 10
+tcp:
+  rpc:
+    hostname: 172.16.1.11
+    intranet: 172.16.1.11
+    port: 5103
+  api:
+    hostname: 172.16.1.11
+    intranet: 172.16.1.11
+    port: 5102

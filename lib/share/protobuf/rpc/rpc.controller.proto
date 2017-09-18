@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package Rpc.controller;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Controller                  *
+ *                                      *
+ ****************************************/
+
+message roleSayWorld {
+    ChatMessage chatMessage = 1;
+}
+
+message sendGuildNotify {
+    uint32 accountId = 1;
+    Model.Guild.NotifyData notifyData = 2;
+}
+
+message roleSayGuild {
+    ChatMessage chatMessage = 1;
+    uint32 guildId = 2;
+}
+
+message roleHasNewApplication {
+    uint32 accountId = 1;
+    uint32 applicationCount = 2;
+}

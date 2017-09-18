@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package Api.hero;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Hero                        *
+ *                                      *
+ ****************************************/
+
+
+// 英雄穿盔甲：会改变英雄属性
+// 如果选择其他英雄穿着的装备会导致该英雄装备被脱下
+message setArmor {
+    message Request {
+        string type = 1;       // [dungeonCopy, arenaCopy, bossCopy, trailCopy]
+        message HeroArmor {
+            uint32 heroUid = 1;
+            uint32 armorUid = 2;
+        }
+        repeated HeroArmor heroArmor = 2;
+    }
+    message Response {
+        Error error = 1;
+        message HeroArmor {
+                uint32 heroUid = 1;
+                uint32 armorUid = 2;
+        }
+        repeated HeroArmor heroArmor = 2;
+    }
+}
+
+message upgradeRune {
+    message Request {
+        RuneType runeType = 1;
+    }
+    message Response {
+        Error error = 1;
+        RuneType runeType = 2;
+    }
+}
+
+
+// 改变英雄外观
+message setAppearance {
+    message Request {
+        uint32 heroUid = 1;
+
+        string name = 3;       // 名字
+        uint32 hairType = 10;  // 发型
+        uint32 hairColor = 11; // 发色
+        uint32 faceType = 12;  // 脸型
+        uint32 skinColor = 13; // 肤色
+        uint32 cape = 14;      // 披风 [0:Null, other: has]
+    }
+    message Response {
+        Error error = 1;
+    }
+}

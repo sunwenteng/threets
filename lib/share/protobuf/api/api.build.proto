@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package Api.build;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Build                       *
+ *                                      *
+ ****************************************/
+
+message init {
+    message Request {}
+    message Response {
+        Error error = 1;
+        // repeated City.Area areas = 2;       // 目前之提供开放区域
+        repeated City.Build builds = 3;     // 所有建筑，可能存在未安置的
+        City.Land land = 4;
+    }
+}
+
+message collectGold {
+    message Request {
+        uint32 uid = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 uid = 2;
+        uint32 gold = 3;
+    }
+}
+
+message sellBuild {
+    message Request {
+        uint32 uid = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 uid = 2;    // 建筑uid
+        uint32 gold = 3;   // 出售价格
+    }
+}
+
+message upgradeBuild {
+    message Request {
+        uint32 uid = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 uid = 2;
+        uint32 level = 3;
+    }
+}
+
+message requestBuild {
+    message Request {
+        repeated uint32 buildUidArray = 1;
+    }
+    message Response {
+        Error error = 1;
+        repeated City.Build buildArray = 2;
+    }
+}
+
+message accelerateBuilding {
+    message Request {
+        BuildType buildType = 1;
+        uint32 id = 2;
+    }
+    message Response {
+        Error error = 1;
+        BuildType buildType = 2;
+        uint32 id = 3;
+    }
+}
+
+message openLand {
+    message Request {
+        Point p1 = 1;
+        Point p2 = 2;
+    }
+    message Response {
+        Error error = 1;
+        uint32 leftTime = 3;
+    }
+}
+
+message updatePosition {
+    message Request {
+        repeated City.Build builds = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message requestLandLeftTime {
+    message Request {}
+    message Response {
+        Error error = 1;
+        uint32 leftTime = 2;
+    }
+}

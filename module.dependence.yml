@@ -1,0 +1,36 @@
+# external dependencies
+- name: mysql.login
+- name: mysql.world
+- name: redis.world
+
+# handler dependencies
+- name: handler.login
+  dependencies: mysql.login
+- name: handler.game
+  dependencies:
+    - mysql.world
+    - mysql.login
+    - redis.world
+    - service.chat
+    - service.coordinate
+    - service.friend
+    - service.boss
+    - service.arena
+    - service.guild
+    - service.role
+
+# service dependencies
+- name: service.chat
+  dependencies: mysql.world, redis.world
+- name: service.coordinate
+  dependencies: mysql.world, redis.world
+- name: service.friend
+  dependencies: mysql.world, redis.world
+- name: service.boss
+  dependencies: mysql.world, redis.world
+- name: service.arena
+  dependencies: mysql.world, redis.world
+- name: service.guild
+  dependencies: mysql.world, redis.world
+- name: service.role
+  dependencies: mysql.world, redis.world

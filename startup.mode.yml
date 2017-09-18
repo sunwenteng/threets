@@ -1,0 +1,6 @@
+standalone:
+  alias: local
+  items: service.*, handler.*
+
+full-service:
+  items: service.*

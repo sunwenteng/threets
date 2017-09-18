@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+// 游戏世界中的实体对象
+package Model.Hero;
+
+import "model/model.equip.proto";
+
+message Avatar {
+	uint32 hairType = 3;  // 发型
+	uint32 hairColor = 4; // 发色
+	uint32 faceType = 5;  // 脸型
+	uint32 skinColor = 6; // 肤色
+}
+
+message Suite {
+	Equip.Armor armor = 1;
+	// 戒指等
+}
+

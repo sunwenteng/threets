@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package View.Guild;
+
+import "model/model.guild.proto";
+import "view/view.player.proto";
+
+message Member {
+	uint32 accountId = 1;
+	Model.Guild.Hierarchy hierarchy = 2;
+	View.Player.NormalMode normalMode = 3;
+}
+
+message DetailInfo {
+	Model.Guild.BriefInfo briefInfo = 1;
+	repeated Member memberList = 2;
+	string announce = 3; // 公会公告
+}
+
+message Petition {
+    uint32 accountId = 1;
+    uint32 guildId = 2;
+    View.Player.NormalMode normalMode = 3;
+}
+
+message Invitation {
+    uint32 guildId = 1;
+    Model.Guild.BriefInfo briefInfo = 2;
+}
+
+message GuildRow {
+    bool hasPetition = 1;
+    Model.Guild.BriefInfo briefInfo = 2;
+}
+
+message OnlineData {
+    uint32 guildId = 1;
+    string name = 2;
+    Model.Guild.Hierarchy hierarchy = 3;
+    Model.Guild.Badge badge = 4;
+    repeated Model.Guild.TechState techLevels = 5;
+    uint32 petitionCount = 6;      // 申请气泡数量
+}

@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package Api.shop;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Shop                        *
+ *                                      *
+ ****************************************/
+
+message Currency {
+    uint32 currencyID = 1;
+    uint32 count = 2;
+}
+
+message init {
+    message Request {
+        uint32 type = 1;       // 标签请求  [0:feature, 1:building, 2:accessories, 3:gold&gems]
+    }
+    message Response {
+        Error error = 1;
+        message ShopItem {
+            // 等策划需求
+        }
+        repeated ShopItem shopItems = 2;
+    }
+}
+
+// 商店购买
+message buy {
+    message Request {
+        uint32 id = 1;
+    }
+    message Response {
+        Error error = 1;
+        repeated Reward reward = 2;                 // 获得奖励
+        repeated Pair propertyModify = 3;
+        uint32 id = 4;
+    }
+}
+
+// 购买建筑并且放置完毕
+message buyBuild {
+    message Request {
+        uint32 id = 1;         // 购买的建筑商品id
+        Point point = 2;
+        uint32 direction = 3;  // 建筑方向
+    }
+    message Response {
+        Error error = 1;
+        City.Build build = 2;
+    }
+}
+
+message chargeInfo {
+    message Notify {
+        uint32 productID = 1;
+        Currency currency = 2;
+        repeated Reward reward = 3;
+    }
+}

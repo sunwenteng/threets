@@ -1,0 +1,26 @@
+{
+  "vars": [
+    "RBase",
+    "RList",
+    "RHash",
+    "RSortedSet",
+    "Leaderboard",
+    "PlayerRO",
+    "ArenaTournament",
+    "CenterRoleRO",
+    "KillerList",
+    "WorldBoss"
+  ],
+  "props": [
+    "RBase",
+    "RList",
+    "RHash",
+    "RSortedSet",
+    "Leaderboard",
+    "PlayerRO",
+    "ArenaTournament",
+    "CenterRoleRO",
+    "KillerList",
+    "WorldBoss"
+  ]
+}

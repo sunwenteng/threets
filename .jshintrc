@@ -1,0 +1,27 @@
+{
+  "nonew":true,
+  "nomen":true,
+  "curly":true,
+  "trailing":true,
+  "white":true,
+  "node":true,
+  "eqeqeq":true,
+  "undef":true,
+  "bitwise":true,
+  "newcap":true,
+  "immed":true,
+  "onevar":true,
+  "camelcase":false,
+  "nonbsp":true,
+  "freeze":true,
+  "sub":true,
+  "loopfunc":true,
+  "globals": {
+    "describe"    : false,
+    "it"          : false,
+    "before"      : false,
+    "beforeEach"  : false,
+    "after"       : false,
+    "afterEach"   : false
+  }
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package Ctrl;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          controller                  *
+ *                                      *
+ ****************************************/
+
+message roleSayWorld {
+    ChatMessage chatMessage = 1;
+}

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "api/api.login.proto";
+
+import "api/api.achievement.proto";
+import "api/api.arena.proto";
+import "api/api.boss.proto";
+import "api/api.chance.proto";
+import "api/api.equip.proto";
+import "api/api.gm.proto";
+import "api/api.hero.proto";
+import "api/api.mail.proto";
+import "api/api.role.proto";
+import "api/api.summonboss.proto";
+import "api/api.activity.proto";
+import "api/api.battle.proto";
+import "api/api.build.proto";
+import "api/api.chat.proto";
+import "api/api.friend.proto";
+import "api/api.guild.proto";
+import "api/api.quest.proto";
+import "api/api.shop.proto";
+import "api/api.trial.proto";
+import "api/api.raid.proto";

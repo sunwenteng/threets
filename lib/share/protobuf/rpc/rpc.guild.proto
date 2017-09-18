@@ -1,0 +1,327 @@
+syntax = "proto3";
+
+package Rpc.guild;
+
+/****************************************
+ *                                      *
+ *          Guild                       *
+ *                                      *
+ ****************************************/
+
+message initGuild {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        Model.Guild.NotJoin notJoin = 2;
+        Model.Guild.MainTab mainTab = 3;
+    }
+}
+
+
+message listGuilds {
+    message Request {
+        uint32 accountId = 1;
+        Model.Guild.SearchCondition condition = 2;
+        uint32 page = 3;
+    }
+    message Response {
+        Error error = 1;
+        repeated View.Guild.GuildRow guildList = 2;
+        uint32 totalSize = 3;
+    }
+}
+
+message createGuild {
+    message Request {
+        uint32 accountId = 1;
+        string name = 2;
+        Model.Guild.Badge badge = 3;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message viewGuild {
+    message Request {
+        uint32 guildId = 1;
+    }
+    message Response {
+        Error error = 1;
+        Model.Guild.DetailInfo info = 2;
+    }
+}
+
+message joinGuild {
+    message Request {
+        uint32 accountId = 1;
+        uint32 guildId = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message leaveGuild {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message mainTab {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        Model.Guild.MainTab mainTab = 2;
+        repeated Model.Guild.TechBoost techBoosts = 3;
+        uint32 hierarchyBoost = 4;
+        uint32 joinGuildCD = 6;
+    }
+}
+
+message membersTab {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        repeated Model.Guild.Member memberList = 2;
+    }
+}
+
+message queryGuildId {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 guildId = 2;
+    }
+}
+
+message updateSettings {
+    message Request {
+        uint32 accountId = 1;
+        Model.Guild.Settings settings = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message sendPetition {
+    message Request {
+        uint32 accountId = 1;
+        uint32 guildId = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message acceptPetition {
+    message Request {
+        uint32 accountId = 1;
+        uint32 petitionAccountId = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message removePetition {
+    message Request {
+        uint32 accountId = 1;
+        bool dismissAll = 2;
+        uint32 dismissAccountId = 3;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message viewPetition {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        repeated Model.Guild.Petition petitionList = 2;
+    }
+}
+
+message viewInvitation {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        repeated View.Guild.Invitation invitationList = 2;
+    }
+}
+
+message sendInvitation {
+    message Request {
+        uint32 accountId = 1;
+        uint32 invitedId = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message acceptInvitation {
+    message Request {
+        uint32 accountId = 1;
+        uint32 guildId = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message dismissInvitation {
+    message Request {
+        uint32 accountId = 1;
+        bool dismissAll = 2;
+        uint32 dismissGuildId = 3;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message kickMember {
+    message Request {
+        uint32 accountId = 1;
+        uint32 kickedId = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message appointHierarchy {
+    message Request {
+        uint32 operatorId = 1;
+        uint32 memberId = 2;
+        uint32 newHierarchy = 3;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message contributeMoney {
+    message Request {
+        uint32 accountId = 1;
+        uint32 money = 2;
+    }
+    message Response {
+        Error error = 1;
+        LevelUp contributeProgressUpdate = 2;
+        uint32 bankMoney = 3;
+    }
+}
+
+message initContribute {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        Level contributeProgress = 2;
+        uint32 bankMoney = 3;
+    }
+}
+
+message initContributeHistory {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+
+        message Item {
+            uint32 accountId = 1;
+            uint32 totalContribute = 2;
+        }
+        repeated Item contributeHistory = 2;
+    }
+}
+
+
+message initTech {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 bankMoney = 2;
+        repeated Model.Guild.TechState techList = 3;
+        repeated Model.Guild.TechBoost techBoosts = 4;
+    }
+}
+
+message upgradeTech {
+    message Request {
+        uint32 accountId = 1;
+        uint32 elementId = 2;
+        uint32 clientTechLevel = 3;
+    }
+    message Response {
+        Error error = 1;
+        uint32 bankMoney = 2;
+        uint32 techBoost = 3;
+    }
+}
+
+message transforLeader {
+    message Request {
+        uint32 operatorId = 1;
+        uint32 memberId = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message updateGuildQuest {
+    message Request {
+        uint32 accountId = 1;
+        Model.Guild.QuestType questType = 2;
+        repeated uint32 param = 3;
+        uint32 value = 4;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message sayWords {
+    message Request {
+        uint32 accountId = 1;
+        ChatMessage chatMessage = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message onlineData {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        Model.Guild.NotJoin notJoin = 2;
+        View.Guild.OnlineData data = 3;
+    }
+}

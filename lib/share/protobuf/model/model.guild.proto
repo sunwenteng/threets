@@ -1,0 +1,177 @@
+syntax = "proto3";
+
+package Model.Guild;
+
+import "view/view.player.proto";
+
+enum Hierarchy {
+    NULL         = 0;
+    GUILD_MASTER = 1;
+    OFFICER      = 2;
+    MEMBER       = 3;
+}
+
+enum NotifyType {
+    NULL        = 0;
+    KICKED      = 1;
+    JOINED      = 2;
+    APPOINTED   = 3;
+    TECH_LEVEL  = 4;
+    NEW_INVITE  = 5;
+    NEW_PETITION = 6;
+}
+
+message Level {
+    uint32 level = 1;
+    uint32 exp = 2;
+}
+
+message Member {
+    uint32 accountId = 1;
+    Hierarchy hierarchy = 2;
+}
+
+message NotJoin {
+    // 没有加入公会的信息都放这里
+    uint32 joinCD = 1;
+    uint32 inviteBubble = 2;
+}
+
+message MainTab {
+    BriefInfo info = 1;
+    string announce = 2;
+    Level guildLevel = 3;
+    uint32 hierarchy = 4;
+    uint32 bankMoney = 5;
+    uint32 operationalBubble = 6;
+    repeated QuestProgress questProgress = 7;
+}
+
+message MemberTab {
+    repeated Member memberList = 1;
+}
+
+// 加入类型
+enum JoinType {
+    CLOSED = 0;
+    OPEN = 1;
+    NEED_APPROVAL = 2;
+}
+
+// 简要信息：行显示
+message BriefInfo {
+    uint32 guildId = 1;
+    string name = 2;
+    uint32 memberCount = 3;
+    JoinType joinType = 4;
+    uint32 requireLevel = 5;
+    uint32 level = 6;
+    Badge badge = 7;
+}
+
+// 详细信信息
+message DetailInfo {
+    BriefInfo briefInfo = 1;
+    repeated Member memberList = 2;
+    string announce = 3;       // 公会公告
+}
+
+// for update
+message Settings {
+    string announce = 1;
+    JoinType joinType = 2;
+    uint32 requireLevel = 3;
+}
+
+message Petition {
+    uint32 accountId = 1;
+    uint32 guildId = 2;
+}
+
+message Invitation {
+    uint32 accountId = 1;
+    uint32 guildId = 2;
+}
+
+message SearchCondition {
+    bool needApproval = 1;
+    uint32 requireLevel = 2;
+    string filterString = 3;
+}
+
+enum EventType {
+    NULL = 0;
+    PLAYER_JOIN = 1;
+    PLAYER_LEAVE = 2;
+    UPDATE_JOIN_LEVEL_SETTING = 3;
+    UPDATE_JOIN_TYPE_SETTING = 4;
+    KICK_MEMBER = 5;
+    MODIFY_NAME = 6;
+    APPOINT_HIERARCHY = 7;
+}
+
+message EventMsg {
+    uint32 eventId = 1;
+    EventType eventType = 2;
+    uint32 createDate = 3;
+    repeated uint32 players = 4;
+    repeated uint32 numArgs = 5;
+    repeated string strArgs = 6;
+}
+
+message NotifyData {
+    NotifyType notifyType = 1;
+    repeated uint32 param = 2;
+}
+
+message TechState {
+    uint32 elementId = 1;
+    uint32 currentLevel = 2;
+}
+
+message TechBoost {
+    uint32 elementId = 1;
+    uint32 boost = 2;
+}
+
+message QuestProgress {
+    uint32 ID = 1;
+    uint32 progress = 2;
+}
+
+message Quest {
+    uint32 questID = 1;
+    uint32 questType = 2;
+    repeated uint32 questParam = 3;
+    uint32 requireCount = 4;
+    uint32 counter = 5;
+    uint32 updateTime = 6;
+    uint32 addExp = 7;
+}
+
+enum QuestType {
+    HIRE_FRIEND_N_FIGHT = 1;
+    TAKE_PART_IN_N_ARENA_FIGHT = 2;
+    TAKE_PART_IN_N_FRIEND_PVP_FIGHT = 3;
+    WIN_N_ARENA_FIGHT = 4;
+    WIN_N_FRIEND_PVP_FIGHT = 5;
+    EARN_N_ARENA_POINT = 6;
+    EARN_N_RES_ID = 7;
+    CRAFT_N_EQUIP_A = 8;
+    STAGE_PASS_N_COUNT = 9;
+    KILL_MONSTER_TYPE_A_IN_CHAPTER_B_N_COUNT = 10;
+    OPEN_CHANCE_CHEST_ID_N_COUNT = 11;
+    FUSE_EQUIP_N_COUNT = 12;
+    COLLECT_GOLD_IN_BUILD = 13;
+    UPGRADE_BUILD_N_COUNT = 14;
+    CRAFT_A_STAR_N_COUNT = 15;
+    UPGRADE_TECH_N_COUNT = 16;
+    KILL_MONSTER_WITH_SPECIAL_SKILL = 17;
+    KILL_KNIGHT_WITH_SPECIAL_SKILL = 18;
+    CONTRIBUTE_N_GOLD = 19;
+}
+
+message Badge {
+    uint32 bottomIcon = 1;
+    uint32 topIcon = 2;
+}

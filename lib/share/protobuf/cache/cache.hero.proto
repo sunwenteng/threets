@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package Cache.Hero;
+
+import "model/model.hero.proto";
+
+message EquipSuite {
+	message Suite {
+		Model.Hero.Suite suite = 1;
+		uint32 attack = 3;
+		uint32 defence = 4;
+	}
+
+	Suite dungeon = 1;
+	Suite arena = 2;
+	Suite boss = 3;
+	Suite trial = 4;
+	Suite raid = 5;
+}

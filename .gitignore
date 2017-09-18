@@ -1,0 +1,32 @@
+/build
+/typings/.baseDir.ts
+/debug
+/client_share
+# directory
+.idea/
+node_modules/
+lib/logs/
+lib/config/untrack/*.*
+src/logs/
+src/gameServer/logs/
+lib/loginserver/logs/
+.svn/
+/publish.json
+/compile
+
+# files
+.pid
+*.log
+*.log.*
+three.iws
+*/coverage/
+lib/config/data/
+.tscache
+src/.baseDir.ts
+compress/
+archive/
+release/
+lib/config/tsdata2
+lib/share/cmd.json
+lib/share/cmd.js
+lib/share/db.js

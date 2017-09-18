@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package Api.chance;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Chance Chest                *
+ *                                      *
+ ****************************************/
+
+message openbox {
+    message Request {
+        uint32 boxId = 1;
+        uint32 batch = 2; //0 单次抽  1 批量抽
+    }
+    message Response {
+        Error error = 1;
+        repeated Reward reward = 2;                 // 获得物品
+    }
+}

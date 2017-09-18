@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package Api.login;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *              Login                   *
+ *                                      *
+ ****************************************/
+
+message auth {
+    message Request {
+        string passport = 1;
+        uint32 platformId = 2;
+        string deviceUid = 3;
+        string device = 4;
+        string deviceType = 5;
+        string deviceToken = 6;
+        string clientVersion = 7;
+    }
+    message Response {
+        Error error = 1;
+        uint32 serverId = 2;
+        uint32 gmAuth = 3;
+    }
+}
+
+message getServerList {
+    message Request {}
+    message Response {
+        message Server {
+            uint32 id = 1;
+            string name = 2;
+            bool canLogin = 3;
+        }
+        Error error = 1;
+        repeated Server serverList = 2;
+    }
+}
+
+message chooseServer {
+    message Request {
+        uint32 serverId = 1;
+    }
+    message Response {
+        Error error = 1;
+        string ip = 2;
+        string port = 3;
+        string resVersion = 4;
+        string version = 5;
+        string resServerAddr = 6;
+        bool canUpdate = 7;
+        repeated uint32 forbidFuncList = 8;
+        bool isMaintain = 9;   // 是否在维护
+    }
+}
+
+message getInfo {
+    message Request {
+        uint32 platformId = 1;
+        string clientVersion = 2;
+    }
+    message Response {
+        Error error = 1;
+        string notice = 2;     // 登陆公告
+        string version = 3;    // 强制更新版本号
+        string updateAddr = 4; // 强制更新地址
+    }
+}
+
+message queryAccountIdServerId {
+    message Request {
+        string passport = 1;
+        uint32 platformId = 2;
+        uint32 queryAccountId = 3; // 要查询的accountId
+    }
+    message Response {
+        Error error = 1;
+        uint32 serverId = 2;   // 0表示未找到
+    }
+}

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package Rpc.coordinate;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Coordinate                  *
+ *                                      *
+ ****************************************/
+
+message register {
+    message Request {
+        string uuid = 1;
+        repeated uint32 onlineId = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message acquireOnlineLock {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        string uuid = 2;
+    }
+}
+
+message releaseOnlineLock {
+    message Request {
+        uint32 accountId = 1;
+        string uuid = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}

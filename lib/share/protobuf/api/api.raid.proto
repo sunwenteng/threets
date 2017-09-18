@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package Api.raid;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *            Raid                      *
+ *                                      *
+ ****************************************/
+
+message selectTeam {
+    message Request {
+        FightTeam team  = 1;  //英雄队伍
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message PlayerStatus {
+    uint32 score = 1;
+    uint32 winCount = 2;
+    uint32 loseCount = 3;
+    uint32 searchTime = 4; //战斗间隔时间
+    uint32 protectTime = 5;     //剩余保护时间
+}
+
+message onlineInfo {
+    message Notify {
+        FightTeam team = 1; //战斗队伍
+        PlayerStatus playerStatus = 2;
+    }
+}
+
+message initRaid {
+    message Request {}
+    message Response {
+        Error error = 1;
+        PlayerStatus playerStatus = 2;
+        uint32 searchCount = 3;
+    }
+}
+
+message searchOpponents {
+    message Request {}
+    message Response {
+        message OpponentInfo {
+            uint32 accountId = 1;
+            uint32 level = 2;
+            string username = 3;
+            uint32 socre = 4;
+            uint32 raidGold = 5;        //可被抢金币
+            Avatar avatar = 6;
+        }
+
+        Error error = 1;
+        repeated OpponentInfo opponentList = 2;
+        uint32 searchCount = 3;
+    }
+}
+
+message startFight {
+    message Request {
+        uint32 opponentId = 1;      //对手accountId
+    }
+    message Response {
+        Error error = 1;
+        string randomSeed = 2; // 随机种子
+        repeated FightHero heros = 3;
+    }
+}
+
+message finishFight {
+    message Request {
+        uint32 result = 1;     // 0: failed, 1: success, 2: flee
+        uint32 totalRound = 2;     // 总共回合
+        repeated uint32 useSlayRound = 3;   // 使用怒气回合列表
+    }
+    message Response {
+        Error error = 1;
+        uint32 raidGold = 2;
+    }
+}

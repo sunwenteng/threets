@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "client_use.proto";
+
+import "rpc/rpc.arena.proto";
+import "rpc/rpc.chat.proto";
+import "rpc/rpc.common.proto";
+import "rpc/rpc.friend.proto";
+import "rpc/rpc.guild.proto";
+import "rpc/rpc.coordinate.proto";
+import "rpc/rpc.controller.proto";
+import "rpc/rpc.boss.proto";
+import "rpc/rpc.role.proto";
+import "rpc/rpc.proto";
+
+// import database definition
+import "db.proto";
+
+import "controller.proto";

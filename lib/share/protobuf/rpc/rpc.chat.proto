@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package Rpc.chat;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Chat                        *
+ *                                      *
+ ****************************************/
+
+message roleSayWorld {
+    message Request {
+        ChatMessage chatMessage = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message fetchLatestWorldMessages {
+    message Request {}
+    message Response {
+        Error error = 1;
+        repeated ChatMessage chatMessages = 2;
+    }
+}

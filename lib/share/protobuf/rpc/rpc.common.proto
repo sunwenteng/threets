@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package Rpc.common;
+
+/****************************************
+ *                                      *
+ *          Common                      *
+ *                                      *
+ ****************************************/
+
+
+message seeProfile {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        RoleProfile profile = 2;
+    }
+}
+
+message initConnect {
+    message Request {
+        uint32 gameserverId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 centerserverId = 2;
+    }
+}
+
+message fetchRoleFightTeam {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        repeated FightPlayer fightPlayers = 2;
+    }
+}
+
+message readRobotFromRole {
+    message Request {
+        uint32 robotList = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message arenaUpdateTournament {
+    message Request {}
+    message Response {}
+}
+
+message writeRobot {
+    message Request {
+        uint32 tournamentId = 1;
+    }
+    message Response {}
+}
+
+message updateWorldBoss {
+    message Request {}
+    message Response {}
+}
+
+message pullWorldBoss {
+    message Request {}
+    message Response {
+        Error error = 1;
+        WorldBoss worldBoss = 2;
+    }
+}
+
+message modifyName {
+    message Request {
+        uint32 accountId = 1;
+        string originName = 2;
+        string resultName = 3;
+    }
+    message Response {
+        Error error = 1;
+    }
+}

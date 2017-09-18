@@ -1,0 +1,571 @@
+syntax = "proto3";
+
+package DB;
+
+// 协议第一层字段要求都是optional
+// 强烈建议给定default值
+
+message Pair {
+    uint32 key = 1;
+    int32 value = 2;
+}
+
+message Point {
+    uint32 x = 1;
+    uint32 y = 2;
+}
+
+// 奖励
+message Reward {
+    uint32 id = 1;
+    uint32 count = 2;
+}
+
+message RewardList {
+    message Entry {     // 条目
+        int32 id = 1;
+        int32 num = 2 [default = 1];
+    }
+    repeated Entry entry = 1;
+}
+
+message ItemList {
+    message Item{
+        int32 id = 1;
+        int32 uid = 2;
+        int32 cnt = 3;
+    }
+
+    repeated Item items = 1;
+}
+
+message MonthSign {
+    uint32 monthId = 1;
+    uint32 hasSignDays = 2;
+    uint32 lastSignTime = 3;
+}
+
+message ReturnSign {
+    uint32 returnDays = 1;
+    uint32 notLoginDays = 2;
+}
+
+message signIn {
+    int32 loginDays = 1 [default = 0];
+    bool firstLogin = 2 [default = false];
+    repeated Reward reward = 3;     // size == loginDays
+    MonthSign monthSign = 4;
+    ReturnSign returnSign = 5;
+}
+
+message Resource {
+    repeated Pair values = 1;
+}
+
+message resource {
+    repeated Pair values = 1;   // 累计资源
+    repeated Pair sundry = 2;   // 杂项
+}
+
+// 主城
+message City {
+    // 建筑安置区域
+    message Area {
+        uint32 ID = 1;
+        bool open = 2;
+        repeated uint32 grid = 3;
+        uint32 openTime = 4 [default = 0];
+    }
+
+    message Land {
+        enum Color {
+            NULL = 0;
+            NOT_OPEN = 1;
+            OPENING = 2;
+            OPEN = 3;
+        }
+
+        message Block {
+            uint32 color = 1;
+            uint32 count = 2;
+        }
+        uint32 height = 1;
+        uint32 width = 2;
+        repeated Block blockArray = 3;
+        uint32 openTime = 4;
+    }
+
+    // 建筑
+    message Build {
+        uint32 uid = 1;
+        uint32 ID = 2;
+        uint32 direction = 3;  // 0=默认方向, 1=相反方向
+        uint32 level = 4;
+        uint32 lastCollectTime = 5;
+        uint32 openTime = 6;
+
+        enum Status {
+            NULL = 0;
+            BUILDING = 1;
+            FINISHED = 2;
+        }
+        Status status = 7;
+
+        Point point = 8;
+    }
+
+    repeated Area areas = 1;       // 目前之提供开放区域
+    repeated Build builds = 2;     // 所有建筑，可能存在未安置的
+}
+
+message builds {
+    // repeated City.Area areas = 1;       // 目前之提供开放区域
+    repeated City.Build builds = 2;     // 所有建筑，可能存在未安置的
+    City.Land land = 3;
+    bool isInit = 4;
+}
+
+
+message HeroBattle {
+    uint32 armor = 2;      // 盔甲Uid
+
+    // attribute
+    uint32 currentHp = 9;  // 当前血量
+    uint32 health = 10;    // 固定值 血量
+    uint32 attack = 11;    // 固定值 攻击
+    uint32 defence = 12;   // 固定值 防御
+    uint32 critical = 13;  // 万分比 暴击
+    uint32 hit = 14;       // 万分比 命中
+    uint32 dodge = 15;     // 万分比 闪避
+}
+
+message BattleArmy {
+    repeated uint32 army = 1;       // 英雄UID列表
+}
+
+message Hero {
+    uint32 uid = 1;
+    uint32 ID = 2;         // 陪表ID
+    string name = 3;
+    bool isUnlock = 4;     // true：已解锁，false：未解锁
+
+    // appearance
+    uint32 hairType = 10;  // 发型
+    uint32 hairColor = 11; // 发色
+    uint32 faceType = 12;  // 脸型
+    uint32 skinColor = 13; // 肤色
+    uint32 cape = 14;      // 披风 [0:Null, other: has]
+
+    HeroBattle dungeonCopy = 20;
+    HeroBattle bossCopy = 21;
+    HeroBattle arenaCopy = 22;
+    HeroBattle trialCopy = 23;
+    HeroBattle raidCopy = 24;
+}
+
+message heros {
+    repeated Hero allHero = 1;
+}
+
+message Equip {
+    uint32 uid = 1;
+    uint32 ID = 2;
+    uint32 level = 3;
+    uint32 exp = 4;        // 当前等级下经验条
+}
+
+message CraftTask {
+    uint32 buildUid = 1;
+    uint32 craftSkillID = 2;
+    uint32 startTime = 3;
+    uint32 timeLength = 4;
+}
+
+message equips {
+    repeated Equip allEquip = 1;
+    repeated CraftTask craftTasks = 2;
+    repeated uint32 handbook = 3;
+}
+
+// 战斗回合数据：战报
+message FightRoundData {
+    uint32 attackerSide = 1;   // 攻击方：1=Left，2=Right
+    uint32 attackerIndex = 2;  // 攻击者下标
+    uint32 defenderIndex = 3;  // 防御这下标
+    uint32 attackFlag = 4;     // 攻击标记：使用与或判断
+    bool isSlay = 5;           // 使用怒气
+    uint32 damage = 6;         // 伤害
+}
+
+message PvEFightDB {
+    uint32 stageID = 1;
+    uint32 hasFinishedWave = 2;
+    uint32 monsterGroupID = 3;
+    uint32 fightInTime = 4;
+    uint32 fightOutTime = 5;
+    repeated FightRoundData roundEntry = 6;
+}
+
+message FightTeam {
+    repeated uint32 heros = 1;      // 自己的骑士
+    repeated uint32 hires = 2;      // 好友accountId
+}
+
+message CacheHealth {
+    uint32 uid = 1;
+    uint32 currentHp = 2;
+}
+
+message Loot {
+    repeated Pair resource = 1;
+}
+
+message OptionalFightLoot {
+    Loot normalLoot = 1;
+    Loot specialLoot = 2;
+}
+
+message FightRound {
+    enum TYPE {
+        PVE = 0;
+        PVP = 1;
+        PVE_EPIC_BOSS = 2;  // 史诗boss
+        PVE_CALL_BOSS = 3;  // 召唤boss
+    }
+    TYPE fightType = 1;
+    string fightSeed = 2;
+    uint32 fightStep = 3;
+    uint32 fightSlay = 4;
+}
+
+message DungeonFight {
+    uint32 stageID = 1;
+    uint32 monsterGroupID = 2;
+    uint32 hasFinishedWave = 3;
+    FightRound currentFightRound = 4;
+    repeated OptionalFightLoot optionalLootArray = 5;
+    uint32 rightDeathCount = 6;
+}
+
+message dungeons {
+    uint32 completeHighestStageID = 1 [default = 0];
+    FightTeam fightTeam = 2;
+    DungeonFight currentFight = 3;
+    repeated FriendEntry hireFriendList = 4;
+}
+
+message AchievementProgress {
+    uint32 ID = 1;
+    uint32 counter = 2;
+    uint32 updateTime = 3;
+    bool changed = 4;
+}
+
+message CompleteAchievement {
+    uint32 ID = 1;
+    uint32 completeTime = 2;
+    enum AchievementStatus {
+        FINISHED_NOT_READ = 0; // 未读
+        FINISHED_HAS_READ = 1; // 已读
+    }
+    AchievementStatus status = 3;
+}
+
+message achievements {
+    repeated AchievementProgress achProgress = 1;
+    repeated CompleteAchievement completeAch = 2;
+}
+
+message ChanceCounterItem {
+    uint32 ID = 1;
+    uint32 counter = 2;
+}
+
+message chanceCounter {
+    repeated ChanceCounterItem counters = 1;
+}
+
+message  worldBoss {
+    uint32 totalDam = 1;
+    uint32 fightTimes = 2;
+    uint32 killTimes = 3;
+    uint32 lastFightBoss = 4;
+    uint32 lastFailBossHp = 5;
+    uint32 rewardKilltimes = 6;
+    uint32 lastGiveBossEnergy = 7;
+    FightTeam team = 8;
+    uint32 lastDam = 11; //last dam
+}
+
+message summonBoss {
+    repeated uint32 killBossList = 1;
+    uint32 bossID = 2;
+    uint32 bossHp = 3;
+    FightTeam fightTeam = 4;
+    repeated FriendEntry hireFriends = 5;
+}
+
+message Quest {
+    uint32 ID = 2;
+
+    enum TYPE {
+        NULL = 0;
+        NORMAL = 1;         // 普通任务
+        LIMIT_TIME = 2;     // 限时任务
+    }
+    TYPE questType = 3;
+
+    enum STATUS {
+        NEW = 0;
+        READ = 1;
+        CAN_COMPLETE = 2;
+        COMPLETE = 3;
+    }
+    STATUS questStatus = 4;
+
+    message Progress {
+        uint32 ID = 1;
+        uint32 counter = 2;
+    }
+    repeated Progress questProgress = 5;
+
+    uint32 updateTime = 6;
+    uint32 arenaTournamentID = 7;
+}
+
+message quests {
+    repeated Quest quests = 1;
+}
+
+message TournamentData {
+    uint32 tournamentId = 1;
+    uint32 score = 2;
+    uint32 rank = 3;
+    uint32 winStreak = 4;
+    uint32 lastWinTime = 5;
+    repeated uint32 gainMilestoneID = 6;
+}
+
+message TournamentRecord {
+    uint32 winCount = 1;
+    uint32 lossCount = 2;
+    uint32 revengeWinCount = 3;
+}
+
+message TournamentHistory {
+    uint32 tournamentId = 1;
+    uint32 rank = 2;
+    uint32 rewardProgress = 3;
+}
+
+message ArenaOpponent {
+    uint32 accountId = 1;
+    bool isRevenge = 2;
+}
+
+message arena {
+     FightTeam fightTeam = 1;
+     repeated ArenaOpponent opponentList = 2;
+     TournamentData tournamentData = 3;
+     repeated TournamentHistory tournamentHistory = 4;
+     TournamentRecord tournamentRecord = 5;
+}
+
+message raid {
+    FightTeam fightTeam = 1;
+}
+
+message FriendEntry {
+    uint32 accountId = 1;
+    string username = 2;
+    uint32 level = 3;
+
+    uint32 hairType = 4;      // 发型
+    uint32 hairColor = 5;     // 发色
+    uint32 faceType = 6;      // 脸型
+    uint32 skinColor = 7;     // 肤色
+    uint32 cape = 8;
+
+    uint32 dungeonArmorID = 11;
+    uint32 dungeonArmorLevel = 12;
+    uint32 arenaArmorID = 13;
+    uint32 arenaArmorLevel = 14;
+    uint32 bossArmorID = 15;
+    uint32 bossArmorLevel = 16;
+
+    uint32 equipAchievementID = 17;
+
+    uint32 win = 18;
+    uint32 loss = 19;
+    uint32 infoType = 20;
+}
+
+message HireMgr {
+    uint32 hiredCount = 1;
+    uint32 firstHireTime = 2;
+    repeated Pair hiredList = 3;
+    uint32 purchaseCount = 4;
+}
+
+message friends {
+
+    message BattleHistory {
+        uint32 friendId = 1;
+        uint32 lastBattleTime = 2;
+    }
+    repeated BattleHistory battleHistory = 1;
+
+    message HireHistory {
+        uint32 friendId = 1;
+        uint32 lastHireTime = 2;
+    }
+    repeated HireHistory hireHistory = 2;
+
+    message FightHistory {
+        uint32 friendId = 1;
+        uint32 win = 2;
+        uint32 loss = 3;
+    }
+    repeated FightHistory currentFriendFightHistory = 3;
+    repeated FightHistory deleteFriendFightHistory = 4;
+
+    HireMgr hireMgr = 5;
+}
+
+// 时间管理
+message time_control {
+    repeated Pair timestamps = 1;
+}
+
+message BossEntry {
+    uint32 bossID = 1;
+    uint32 leftHp = 2;
+    uint32 level = 3;
+}
+
+message BossFight {
+    BossEntry bossEntry = 1;
+    repeated OptionalFightLoot optionalLootArray = 2;
+    FightRound currentFightRound = 3;
+}
+
+message BossData {
+    uint32 bossID = 1;
+    uint32 bossLevel = 2;
+    bool isActive = 3;
+    uint32 lastActiveTime = 4;
+    uint32 leftHealth = 5;
+    uint32 score = 6;
+    uint32 rank = 7;
+    uint32 killCount = 8;
+    repeated uint32 gainMilestoneID = 9;
+}
+
+message BossHistory {
+    uint32 bossID = 1;
+    uint32 rank = 2;
+    uint32 rewardProgress = 3;
+}
+
+message boss {
+    FightTeam fightTeam = 1;
+    BossFight currentFight = 2;
+    repeated FriendEntry hireFriendList = 3;
+    BossData bossData = 4;
+    repeated BossHistory bossHistory = 5;
+}
+
+message Mail {
+    uint32 uid = 1;
+    string title = 2;
+    string sender = 3;
+    uint32 sendTime = 4;
+    string content = 5;
+    repeated Reward attachment = 6;
+
+    enum MailStatus {
+        NULL = 0;
+        NEW = 1;
+        READ = 2;
+        RECEIVED = 3;
+    }
+    MailStatus status = 7;
+}
+
+message mails {
+    repeated Mail mailList = 1;
+}
+
+message FlourishingShopBracket {
+    string title = 1;
+    uint32 relativeTimeDiff = 2;
+    uint32 productID = 3;
+    repeated Reward reward = 4;
+}
+
+message ShopOrder {
+    uint32 payID = 1;
+    uint32 status = 2;
+    uint32 activityId = 3;
+    uint32 bracketIndex = 4;
+    FlourishingShopBracket bracket = 5;
+}
+
+message FlourishingShopData {
+    uint32 activityId = 1;
+    uint32 bracketIndex = 2;
+    ShopOrder order = 3;
+}
+
+message activities {
+    repeated Pair loginGiftData = 1;
+    repeated Pair consumeData = 2;
+    repeated Pair flourishingChestData = 3;
+    repeated Pair craftData = 4;
+    FlourishingShopData floShopData = 5;
+}
+
+message ShieldRole {
+    uint32 accountId = 1;
+    uint32 level = 2;
+    string username = 3;
+}
+
+message chats {
+    uint32 latestSendTime = 1;
+    repeated ShieldRole shieldList = 2;
+    bool isForbidden = 3;
+}
+
+message Trial {
+    uint32 trialID = 1;
+    uint32 victoryCount = 2;
+    uint32 lastVicTime = 3;
+}
+
+message TrialFight {
+    uint32 trialID = 1;
+    uint32 hasFinishedWave = 3;
+    FightRound currentFightRound = 4;
+    repeated OptionalFightLoot optionalLootArray = 5;
+    uint32 rightDeathCount = 6;
+}
+
+message trials {
+    uint32 firstVictoryTime = 1;
+    repeated Trial trialData = 2;
+    FightTeam fightTeam = 3;
+    TrialFight currentFight = 4;
+}
+
+message TechState {
+     uint32 elementId = 1;
+     uint32 currentLevel = 2;
+}
+message guildTech {
+    repeated TechState techList = 1;
+}
+
+message guildQuest {
+    repeated Model.Guild.Quest questList = 1;
+}

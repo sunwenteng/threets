@@ -1,0 +1,230 @@
+syntax = "proto3";
+
+package Api.role;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Role                        *
+ *                                      *
+ ****************************************/
+
+message reconnect {
+    message Request {
+        string clientVersion = 1;      // 客户端版本
+        string resVersion = 2;         // 资源版本号
+    }
+    message Response {
+        Error error = 1;
+        string clientVersion = 2;
+        string clientDownloadUrl = 3;  // if has clientVersion
+        string resVersion = 4;
+        string resServerAddr = 5;      // if has resVersion
+    }
+}
+
+message online {
+    message Request {
+        string passport = 1;
+        uint32 platformId = 2;
+        string deviceUid = 3;
+        string deviceOS = 4;   // IOS / Android / Windows
+        string deviceType = 5;
+        string deviceToken = 6;
+        uint32 accountIdForGMLogin = 7;    // GM登录用accountId
+    }
+    message Response {
+        Error error = 1;       // 1
+        uint32 serverNow = 2;
+    }
+}
+
+message heartBeat {
+    message Request {}
+    message Response {
+        Error error = 1;
+    }
+}
+
+message signInfo {
+    message Request {}
+    message Response {
+        Error error = 1;       // 1
+
+        message SignInInfo {
+            int32 loginDays = 1;       // 已经登录天数，包含今天
+            bool firstLogin = 2;       // true: 第一次登录, false:非第一次登录
+            repeated Reward reward = 3;    // firstLogin = true 有效
+        }
+        SignInInfo signInfo = 2;   // 2
+    }
+}
+
+message updateGuide {
+    message Request {
+        uint32 progress = 1;   // A*100+B， A主要进度，B：次要进度
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message getGift {
+    message Request {
+        string code = 1;
+    }
+    message Response {
+        Error error = 1;
+        repeated Reward reward = 2;
+    }
+}
+
+message finishGuideBattle {
+    message Request {}
+    message Response {
+        Error error = 1;
+        Loot reward = 2;
+    }
+}
+
+message gainFirstCharge {
+    message Request {}
+    message Response {
+        Error error = 1;
+    }
+}
+
+message gainNewsFacebook {
+    message Request {}
+    message Response {
+        Error error = 1;
+        repeated Reward reward = 2;
+    }
+}
+
+message shareGame {
+    message Request {}
+    message Response {
+        Error error = 1;
+    }
+}
+
+message gainShareReward {
+    message Request {}
+    message Response {
+        Error error = 1;
+        repeated Reward reward = 2;
+    }
+}
+
+message monthSign {
+    message Request {}
+    message Response {
+        Error error = 1;
+        uint32 hasSignDays = 2;
+        repeated Reward reward = 3;
+    }
+}
+
+
+/****************************************
+ *                                      *
+ *   Notify                             *
+ *                                      *
+ ****************************************/
+
+message initProperty {
+    message Notify {
+        repeated Pair values = 1;   // 累计资源
+        repeated Pair sundry = 2;   // 杂项
+    }
+}
+
+message updateProperty {
+    message Notify {
+        repeated Pair values = 1;   // 累计资源
+        repeated Pair sundry = 2;   // 杂项
+    }
+}
+
+// 前置协议: initEquip.Notify
+message initHero {
+    message Notify {
+        repeated Hero allHero = 1;
+        repeated RuneLevel runeLevels = 2;  // 全部
+    }
+}
+
+message updateHero {
+    message Notify {
+        repeated Hero allHero = 1;
+    }
+}
+
+message initEquip {
+    message Notify {
+        repeated Equip allEquip = 1;
+    }
+}
+
+message updateEquip {
+    message Notify {
+        repeated Equip allEquip = 1;
+    }
+}
+
+message deleteEquip {
+    message Notify {
+        repeated uint32 deleteUidArray = 1;
+    }
+}
+
+message initBattle {
+    message Notify {
+        bool isFighting = 1;
+        FightRound.TYPE fightType = 2;
+        string fightSeed = 3;
+    }
+}
+
+message initDungeon {
+    message Notify {
+        uint32 completeHighestStageID = 1;    // 最高完成记录
+        uint32 currentStage = 2;       // 0表示没有
+        FightTeam team = 3;
+    }
+}
+
+message initInfo {
+    message Notify {
+        uint32 accountId = 1;
+    }
+}
+
+message initMonthSign {
+    message Notify {
+        uint32 month = 1;
+        uint32 hasSignDays = 2;
+        bool isSigned = 3;
+    }
+}
+
+message initReturnReward {
+    message Notify {
+        uint32 returnDays = 1;
+        bool hasReward = 2;
+    }
+}
+
+message sundryInfo {
+    message Notify {
+        bool isTest = 1;
+    }
+}
+
+message kickOff {
+    message Notify {
+        string other_ip = 1;
+    }
+}

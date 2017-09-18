@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package Api.chat;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Chat                        *
+ *                                      *
+ ****************************************/
+
+// 初始化聊天信息
+message initChat {
+    message Request {}
+    message Response {
+        Error error = 1;
+        repeated ChatMessage chatMessages = 2;
+    }
+}
+
+// 发送世界聊天
+message sayWorld {
+    message Request {
+        string chatText = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+// 发送公会聊天
+message sayGuild {
+    message Request {
+        string chatText = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+// 更新屏蔽列表
+message updateForbidList {
+    message Request {
+        repeated ShieldRole shieldAdd = 1;  // 新增屏蔽列表
+        repeated uint32 shieldDel = 2;  // 删除屏蔽列表
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+// 新消息通知
+message newMessage {
+    message Notify {
+        ChatMessage chatMessage = 1;
+    }
+}
+
+message initOnline {
+    message Notify {
+        repeated ShieldRole shieldList = 1;     // 屏蔽玩家ID列表
+        uint32 leftSendSecond = 2; // 剩余发送世界聊天时间（秒）
+    }
+}

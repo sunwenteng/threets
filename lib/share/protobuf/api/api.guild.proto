@@ -1,0 +1,281 @@
+syntax = "proto3";
+
+package Api.guild;
+
+import "global.proto";
+import "model/model.guild.proto";
+import "view/view.guild.proto";
+
+/****************************************
+ *                                      *
+ *          Guild                       *
+ *                                      *
+ ****************************************/
+
+message initGuild {
+    message Request {}
+    message Response {
+        Error error = 1;
+        Model.Guild.NotJoin notJoin = 2;
+        Model.Guild.MainTab mainTab = 3;
+    }
+}
+
+message createGuild {
+    message Request {
+        string name = 1;   // 公会名字
+        Model.Guild.Badge badge = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message joinGuild {
+    message Request {
+        uint32 guildId = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message viewGuild {
+    message Request {
+        uint32 guildId = 1;
+    }
+    message Response {
+        Error error = 1;
+        View.Guild.DetailInfo info = 2;
+    }
+}
+
+message leaveGuild {
+    message Request {}
+    message Response {
+        Error error = 1;
+    }
+}
+
+message membersTab {
+    message Request {}
+    message Response {
+        Error error = 1;
+        repeated View.Guild.Member memberList = 2;
+    }
+}
+
+message listGuilds {
+    message Request {
+        Model.Guild.SearchCondition condition = 1;
+        uint32 page = 2;
+    }
+    message Response {
+        Error error = 1;
+        repeated View.Guild.GuildRow guildList = 2;
+        uint32 totalSize = 3;
+    }
+}
+
+message updateSettings {
+    message Request {
+        Model.Guild.Settings settings = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message sendPetition {
+    message Request {
+        uint32 guildId = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message viewPetition {
+    message Request {}
+    message Response {
+        Error error = 1;
+        repeated View.Guild.Petition petitionList = 2;
+    }
+}
+
+message acceptPetition {
+    message Request {
+        uint32 petitionAccountId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 petitionAccountId = 2;
+    }
+}
+
+message dismissPetition {
+    message Request {
+        bool dismissAll = 1;
+        uint32 dismissAccountId = 2;
+    }
+    message Response {
+        Error error = 1;
+        uint32 dismissAccountId = 2;
+    }
+}
+
+message viewInvitation {
+    message Request {
+    }
+    message Response {
+        Error error = 1;
+        repeated View.Guild.Invitation invitationList = 2;
+    }
+}
+
+message sendInvitation {
+    message Request {
+        uint32 invitedId = 1;   // 受邀人ID
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message acceptInvitation {
+    message Request {
+        uint32 guildId = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message dismissInvitation {
+    message Request {
+        bool dismissAll = 1;
+        uint32 dismissGuildId = 2;
+    }
+    message Response {
+        Error error = 1;
+        uint32 dismissAccountId = 2;
+    }
+}
+
+message kickMember {
+    message Request {
+        uint32 kickedId = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 kickedId = 2;
+    }
+}
+
+message fetchEvent {
+    message Request {
+        uint32 page = 1;
+    }
+    message Response {
+        Error error = 1;
+
+        repeated Model.Guild.EventMsg eventList = 2;
+
+        message NamePair {
+            uint32 accountId = 1;
+            string name = 2;
+        }
+        repeated NamePair namePair = 3;
+
+        uint32 currentPage = 4;
+        uint32 totalPage = 5;
+    }
+}
+
+message appointHierarchy {
+    message Request {
+        uint32 memberId = 1;
+        Model.Guild.Hierarchy hierarchy = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message initContribute {
+    message Request {}
+    message Response {
+        Error error = 1;
+        uint32 bankMoney = 2;
+        Level contributeProgress = 3;
+    }
+}
+
+message contributeMoney {
+    message Request {
+        uint32 money = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 bankMoney = 2;
+        LevelUp contributeProgressUpdate = 3;
+        repeated Reward reward = 4;
+    }
+}
+
+message initContributeHistory {
+    message Request {}
+    message Response {
+        Error error = 1;
+        message Item {
+            uint32 accountId = 1;
+            View.Player.NormalMode normalMode = 2;
+            uint32 contribute = 3;
+        }
+        repeated Item historyList = 2;
+    }
+}
+
+message initTech {
+    message Request {
+    }
+    message Response {
+        Error error = 1;
+        uint32 bankMoney = 2;
+        repeated Model.Guild.TechState techList = 3;
+    }
+}
+
+message upgradeTech {
+    message Request {
+        uint32 elementId = 1;
+        uint32 clientTechLevel = 2;    //客户端当前科技等级
+    }
+    message Response {
+        Error error = 1;
+        uint32 bankMoney = 2;
+    }
+}
+
+message transforLeader {
+    message Request {
+        uint32 memberId = 1;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+
+message newNotify {
+    message Notify {
+        Model.Guild.NotifyData notifyData = 1;
+    }
+}
+
+message onlineData {
+    message Notify {
+        Model.Guild.NotJoin notJoin = 1;
+        View.Guild.OnlineData data = 2;
+    }
+}

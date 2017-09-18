@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package Api.arena;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Arena                       *
+ *                                      *
+ ****************************************/
+
+
+// 主界面
+message initInfo {
+    message Request {}
+    message Response {
+        Error error = 1;
+        uint32 score = 2;
+        uint32 rank = 3;
+        uint32 winStreak = 4;
+        uint32 streakEndTime = 5;
+        uint32 recoverEnergyTime = 6;//恢复体力时间
+        string topPlayerName = 7;
+        string topFriendName = 8;
+    }
+}
+
+// 打开对手界面
+message initBattleList {
+    message Request {}
+    message Response {
+        Error error = 1;
+        repeated OpponentInfo opponentList = 2;
+    }
+}
+
+message selectTeam {
+    message Request {
+        FightTeam team  = 1;  //英雄队伍
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message startFight {
+    message Request {
+        uint32 fightType = 1; //1 normal fight  2 power fight
+        uint32 opponentId = 2;
+    }
+    message Response {
+        Error error = 1;
+        string randomSeed = 2; // 随机种子
+        repeated FightHero heros = 3;
+        uint32 fightType = 4; //1 normal fight  2 power fight
+        uint32 arenaEnergyNextTime = 5; // 下一点boss能量回复剩余时间
+    }
+}
+
+message finishFight {
+    message Request {
+        uint32 result = 1;     // 0: failed, 1: success, 2: flee
+        uint32 totalRound = 2;     // 总共回合
+        repeated uint32 useSlayRound = 3;   // 使用怒气回合列表
+    }
+    message Response {
+        Error error = 1;
+        uint32 earned = 2;
+        uint32 winTimesScore = 3;
+        uint32 revengeScore = 4;
+        uint32 totalScore = 5;
+        uint32 winTimesRewardGet = 6;
+        uint32 scoreRewardGet = 7;
+        uint32 winStreak = 8;
+    }
+}
+
+message rankList {
+    message Request {
+        uint32 rankType  = 1; //排行榜类型  1=top10 2=friends 3=world
+        uint32 page  = 2;
+        uint32 group = 3;
+    }
+    message Response {
+        Error error = 1;
+        uint32 rankType  = 2; //排行榜类型  1=top10 2=friends 3=world
+        repeated LeaderboardItem roles = 3;
+        uint32 currentPage  = 4;
+        uint32 totalPage  = 5;
+        uint32 currentGroup = 6;
+        uint32 totalGroup = 7;
+    }
+}
+
+message onlineInfo {
+    message Notify {
+        uint32 tournamentId = 1;       //联赛ID
+        uint32 tournamentLeftTime = 2; //联赛剩余时间
+        repeated LastTopArenaRole topRoles = 3;     //排行前三名玩家
+        uint32 totalWinCount = 4;
+        uint32 totalLossCount = 5;
+        uint32 revengeWins = 6;
+        FightTeam team = 7; //战斗队伍
+        repeated TournamentHistory tournamentHistory = 8;
+        LastTournamentReward lastTournamentReward = 9;
+        uint32 arenaEnergyNextTime = 10; // 下一点boss能量回复剩余时间
+    }
+}
+
+message updateTournamentInfo {
+    message Notify {
+        uint32 tournamentId = 1;
+        enum TOURNAMENT_PROGRESS {
+            NOT_START = 0;
+            PVP_START = 1;
+            RESULT_SORTING = 2;
+            TOURNAMENT_END = 3;
+        }
+        TOURNAMENT_PROGRESS tournamentProgress = 2;
+    }
+}

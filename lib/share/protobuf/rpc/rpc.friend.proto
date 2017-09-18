@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package Rpc.friend;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Friend                      *
+ *                                      *
+ ****************************************/
+
+
+message fetchFriendList {
+    message Request {
+        uint32 accountId = 1;
+    }
+    message Response {
+        Error error = 1;
+
+        message FriendEntry {
+            uint32 accountId = 1;
+            FriendEntryType entryType = 2;
+        }
+
+        repeated FriendEntry friendList = 2;
+    }
+}
+
+message applyForFriend {
+    message Request {
+        uint32 accountId = 1;
+        string friendCode = 2;
+        string username = 3;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message handleApplication {
+    message Request {
+        uint32 accountId = 1;
+        uint32 friendId = 2;
+        uint32 handleType = 3;
+    }
+    message Response {
+        Error error = 1;
+    }
+}
+
+message delFriend {
+    message Request {
+        uint32 accountId = 1;
+        uint32 friendId = 2;
+    }
+    message Response {
+        Error error = 1;
+    }
+}

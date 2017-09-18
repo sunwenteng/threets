@@ -1,0 +1,542 @@
+syntax = "proto3";
+
+/****************************************
+ *                                      *
+ *          Global                      *
+ *                                      *
+ ****************************************/
+
+
+// 错误码
+message Error {
+    uint32 code = 1;
+    repeated int32 param = 2;
+    string message = 3;
+}
+
+// 奖励
+message Reward {
+    uint32 id = 1;
+    uint32 count = 2;
+}
+
+message Point {
+    uint32 x = 1;
+    uint32 y = 2;
+}
+
+message Pair {
+    uint32 key = 1;
+    int32 value = 2;
+}
+
+message HeroBattle {
+    uint32 armor = 2;      // 盔甲Uid
+
+    // attribute
+    uint32 currentHp = 9;  // 当前血量
+    uint32 health = 10;    // 固定值 血量
+    uint32 attack = 11;    // 固定值 攻击
+    uint32 defence = 12;   // 固定值 防御
+    uint32 critical = 13;  // 万分比 暴击
+    uint32 hit = 14;       // 万分比 命中
+    uint32 dodge = 15;     // 万分比 闪避
+}
+
+message BattleArmy {
+    repeated uint32 army = 1;       // 英雄UID列表
+}
+
+message Hero {
+    uint32 uid = 1;
+    uint32 ID = 2;         // 陪表ID
+    string name = 3;
+    bool isUnlock = 4;     // true：已解锁，false：未解锁
+
+    // appearance
+    uint32 hairType = 10;  // 发型
+    uint32 hairColor = 11; // 发色
+    uint32 faceType = 12;  // 脸型
+    uint32 skinColor = 13; // 肤色
+    uint32 cape = 14;      // 披风 [0:Null, other: has]
+
+    HeroBattle dungeonCopy = 20;
+    HeroBattle bossCopy = 21;
+    HeroBattle arenaCopy = 22;
+    HeroBattle trialCopy = 23;
+    HeroBattle raidCopy = 24;
+}
+
+enum RuneType {
+    ATTACK = 1;
+    DEFENCE = 2;
+    HEALTH = 3;
+}
+
+message RuneLevel {
+    RuneType runeType = 1;
+    uint32 level = 2;
+}
+
+message Equip {
+    uint32 uid = 1;
+    uint32 ID = 2;
+    uint32 level = 3;
+    uint32 exp = 4;        // 当前等级下经验条
+}
+
+message FriendHero {
+    uint32 accountId = 1;
+    Hero hero = 2;
+}
+
+message FightTeam {
+    repeated uint32 heros = 1;      // 自己的骑士
+    repeated uint32 hires = 2;      // 好友accountId
+}
+
+// 战斗回合数据：战报
+message FightRoundData {
+    uint32 attackerSide = 1;   // 攻击方：1=Left，2=Right
+    uint32 attackerIndex = 2;  // 攻击者下标
+    uint32 defenderIndex = 3;  // 防御这下标
+    uint32 attackFlag = 4;     // 攻击标记：使用与或判断
+    bool isSlay = 5;           // 使用怒气
+    uint32 damage = 6;         // 伤害
+}
+
+message CacheHealth {
+    uint32 uid = 1;
+    uint32 currentHp = 2;
+}
+
+message FightRound {
+    repeated CacheHealth leftHealth = 1;
+    repeated CacheHealth rightHealth = 2;
+    repeated FightRoundData roundEntry = 3;
+    Loot fightLoot = 4;
+
+    enum TYPE {
+        PVE = 0;
+        PVP = 1;
+        PVE_EPIC_BOSS = 2;  // 史诗boss
+        PVE_CALL_BOSS = 3;  // 召唤boss
+        TRIAL = 5;
+    }
+    TYPE fightType = 5;
+}
+
+message PvEFightNet {
+    uint32 stageID = 1;
+    uint32 hasFinishedWave = 2;
+    uint32 monsterGroupID = 3;
+}
+
+message CraftTask {
+    uint32 buildUid = 1;
+    uint32 craftSkillID = 2;
+    uint32 leftTime = 3;
+}
+
+message AchievementProgress {
+    uint32 ID = 1;
+    uint32 counter = 2;
+    uint32 updateTime = 3;
+
+    enum AchievementStatus {
+        DOING = 0;  // 正在进行
+        FINISHED_NOT_READ = 1; // 完成未读
+        FINISHED_HAS_READ = 2; // 完成已读
+    }
+    AchievementStatus status = 4;
+}
+
+message Quest {
+    uint32 ID = 2;
+
+    enum TYPE {
+        NULL = 0;
+        NORMAL = 1;         // 普通任务
+        LIMIT_TIME = 2;     // 限时任务
+    }
+    TYPE questType = 3;
+
+    enum STATUS {
+        NEW = 0;
+        READ = 1;
+        CAN_COMPLETE = 2;
+        COMPLETE = 3;
+    }
+    STATUS questStatus = 4;
+
+    message Progress {
+        uint32 ID = 1;
+        uint32 counter = 2;
+    }
+    repeated Progress questProgress = 5;    // 如果questStatus == STATUS.COMPLETE，该字段为空
+
+    uint32 updateTime = 6;
+}
+
+message QuestUpdate {
+    uint32 ID = 1;
+    Quest.STATUS questStatus = 2;
+    repeated Quest.Progress questProgress = 3;
+    uint32 updateTime = 4;
+    Quest.TYPE questType = 5;
+}
+
+message CompleteQuest {
+    uint32 ID = 1;
+    uint32 completeTime = 2;
+}
+
+message Loot {
+    repeated Pair resource = 1;
+}
+
+message FightLoot {
+    Loot normalLoot = 1;
+    Loot specialLoot = 2;
+}
+
+message LeaderboardItem {
+    uint32 accountId = 1;
+    Avatar avatar = 2;
+    uint32 level = 3;
+    string username = 4;
+    uint32 achievementID = 5;
+
+    uint32 score = 6;
+    uint32 rank = 7;   // rank = 0 means unranked
+}
+
+message FriendApplication {
+    uint32 friendId = 1;
+    string username = 2;
+    uint32 applyTime = 3;
+}
+
+message CenterFriendInfo {
+    uint32 accountId = 1;
+    string usernmae = 2;
+    uint32 level = 3;
+    uint32 armorID = 4;
+}
+
+message ArenaHistory {
+    int32 arenaId = 1;
+    int32 rank = 2;
+}
+
+message ArenaTournament {
+    uint32 tournamentId = 1;
+    uint32 startTime = 2;
+    uint32 endTime = 3;
+    uint32 progress = 4;
+}
+
+message WorldBoss {
+    uint32 bossID = 1;
+    uint32 startTime = 2;
+    uint32 endTime = 3;
+    uint32 progress = 4;
+}
+
+message FightPlayer {
+    uint32 uid = 1;
+    uint32 ID = 2;         // 陪表ID
+    string name = 3;
+
+    // appearance
+    uint32 hairType = 4;  // 发型
+    uint32 hairColor = 5; // 发色
+    uint32 faceType = 6;  // 脸型
+    uint32 skinColor = 7; // 肤色
+    uint32 cape = 8;      // 披风 [0:Null, other: has]
+
+    uint32 level = 9;
+    uint32 armorID = 10;      //
+    uint32 armorLevel = 11;
+}
+
+message FightHero {
+    uint32 uid = 1;
+    uint32 ID = 2;         // 陪表ID
+    string name = 3;
+
+    // appearance
+    uint32 hairType = 4;  // 发型
+    uint32 hairColor = 5; // 发色
+    uint32 faceType = 6;  // 脸型
+    uint32 skinColor = 7; // 肤色
+    uint32 cape = 8;      // 披风 [0:Null, other: has]
+
+    // attribute
+    uint32 currentHp = 9;  // 当前血量
+    uint32 health = 10;    // 固定值 血量
+    uint32 attack = 11;    // 固定值 攻击
+    uint32 defence = 12;   // 固定值 防御
+    uint32 critical = 13;  // 万分比 暴击
+    uint32 hit = 14;       // 万分比 命中
+    uint32 dodge = 15;     // 万分比 闪避
+    uint32 armorID = 16;      //
+    uint32 armorLevel = 17;
+    uint32 level = 18;
+}
+
+message RoleProfile {
+
+    message HeroBattleInfo {
+        uint32 armorID = 1;
+        uint32 armorLevel = 2;
+        uint32 maxHp = 3;
+        uint32 attack = 4;
+        uint32 defence = 5;
+    }
+
+    message HeroInfo {
+        uint32 level = 1;
+        string name = 2;
+        uint32 hairType = 3;
+        uint32 hairColor = 4;
+        uint32 faceType = 5;
+        uint32 skinColor = 6;
+        uint32 cape = 7;
+
+        HeroBattleInfo dungeonCopy = 10;
+        HeroBattleInfo bossCopy = 11;
+        HeroBattleInfo arenaCopy = 12;
+        HeroBattleInfo trialCopy = 13;
+        HeroBattleInfo raidCopy = 14;
+    }
+
+    message ProgressionSummary {
+        uint32 equipAchievementID = 1;
+        uint32 completedAchievementCount = 2;
+        repeated uint32 epicBossesFought = 3;       // array
+    }
+
+    message ArenaCombatSummary {
+        uint32 win = 1;
+        uint32 loss = 2;
+        uint32 revengeWin = 3;
+        repeated ArenaHistory tournamentWinnings = 4;     // array
+    }
+
+    uint32 accountId = 1;
+    string friendCode = 2;
+    HeroInfo heroInfo = 3;
+    ProgressionSummary summary = 4;
+    ArenaCombatSummary arena = 5;
+}
+
+enum FriendEntryType {
+    NULL = 0;
+    APPLICATION = 1;
+    FRIEND = 2;
+}
+
+message FriendInfo {
+    uint32 accountId = 1;
+    RoleProfile.HeroInfo heroInfo = 2;
+    uint32 win = 3;
+    uint32 loss = 4;
+
+    FriendEntryType infoType = 5;
+    uint32 equipAchievementID = 6;
+    uint32 battleLeftCoolDown = 7;
+}
+
+message Avatar {
+    uint32 armorID = 1;   //
+    uint32 armorLevel = 2;   //
+    uint32 hairType = 3;  // 发型
+    uint32 hairColor = 4; // 发色
+    uint32 faceType = 5;  // 脸型
+    uint32 skinColor = 6; // 肤色
+}
+
+message OpponentInfo {
+    uint32 accountId = 1;
+    Avatar avatar = 2;
+    uint32 level = 3;
+    string username = 4;
+    uint32 achievementID = 5;
+
+    // about arena
+    uint32 score = 6;
+    uint32 rank = 7;   // rank = 0 means unranked
+    bool isRevenge = 8;    // 是否是复仇
+}
+
+message LastTopArenaRole {
+    uint32 accountId = 1;
+    Avatar avatar = 2;
+    string username = 3;
+    uint32 level = 4;
+}
+
+message LastTournamentReward {
+    uint32 rank = 1;
+    uint32 rewardId = 2;
+}
+
+message TournamentHistory {
+    uint32 tournamentId = 1;
+    uint32 rank = 2;
+}
+
+message LastBossReward {
+    uint32 bossID = 1;
+    uint32 rank = 2;
+    uint32 rewardId = 3;       // boss_reward.ID
+}
+
+message LevelUp {
+    uint32 originLevel = 1;
+    uint32 resultLevel = 2;
+    uint32 originExp = 3;
+    uint32 resultExp = 4;
+    uint32 growCount = 5;
+}
+
+message Level {
+    uint32 level = 1;
+    uint32 exp = 2;
+}
+
+message GuildInfo {
+    string name = 1;
+}
+
+message City {
+    // 建筑安置区域
+    message Area {
+        uint32 ID = 1;
+        bool open = 2 [default = false];
+        repeated sint32 grid = 3;
+        uint32 leftTime = 4 [default = 0];
+    }
+
+    message Land {
+        enum Color {
+            NULL = 0;
+            NOT_OPEN = 1;
+            OPENING = 2;
+            OPEN = 3;
+        }
+
+        message Block {
+            uint32 color = 1;
+            uint32 count = 2;
+        }
+        uint32 height = 1;
+        uint32 width = 2;
+        repeated Block blockArray = 3;
+        uint32 leftTime = 4;
+    }
+
+    // 建筑
+    message Build {
+        uint32 uid = 1;
+        uint32 ID = 2;
+        uint32 direction = 3;               // 0=默认方向, 1=相反方向
+        uint32 level = 4;
+        uint32 collectGold = 5;             // 可收集金币
+        uint32 leftTime = 6;
+
+        enum Status {
+            NULL = 0;
+            BUILDING = 1;
+            FINISHED = 2;
+        }
+        Status status = 7;
+
+        Point point = 8;
+    }
+
+    repeated Area areas = 1;       // 目前之提供开放区域
+    repeated Build builds = 2;     // 所有建筑，可能存在未安置的
+    Land land = 3;
+}
+message Consume {
+    message Resource {
+        uint32 id = 1;
+        int32 left = 2;      // 剩余数量
+        int32 consume = 3;   // 消耗数量
+    }
+}
+
+enum BuildType {
+    NULL = 0;
+    AREA = 1;
+    BUILD = 2;
+}
+
+
+/****************************************
+ *                                      *
+ *   chat                               *
+ *                                      *
+ ****************************************/
+
+enum ChatType {
+    NULL = 0;
+    WORLD = 1;      // 世界
+    WHISPER = 2;    // 私聊
+    GUILD = 3;      // 公会
+}
+
+message ChatSender {
+    uint32 accountId = 1;
+    string username = 2;
+    uint32 level = 3;
+    Avatar avatar = 4;
+    uint32 achievementID = 5;
+    uint32 guildId = 6;
+}
+
+message ChatMessage {
+    ChatType chatType = 1;     // 类型
+    string chatText = 2;       // 文本内容
+    uint32 timestamp = 3;      // 时间戳
+    ChatSender sender = 4;     // 发送人信息
+}
+
+message ShieldRole {
+    uint32 accountId = 1;
+    uint32 level = 2;
+    string username = 3;
+}
+
+
+message PlayerInfo {
+    required uint32 accountId = 1;
+    required string username = 2;
+    required uint32 level = 3;
+    required uint32 hairType = 4;
+    required uint32 hairColor = 5;
+    required uint32 faceType = 6;
+    required uint32 skinColor = 7;
+    required uint32 cape = 8;
+    required uint32 achievementId = 9;
+    required uint32 dungeonArmorID = 10;
+    required uint32 dungeonArmorLevel = 11;
+    required uint32 arenaArmorID = 12;
+    required uint32 arenaArmorLevel = 13;
+    required uint32 bossArmorID = 14;
+    required uint32 bossArmorLevel = 15;
+}
+
+message RoleFriendInfo {
+    repeated uint32 applicationIdList = 1;
+    repeated uint32 friendIdList = 2;
+    repeated PlayerInfo playerInfoList = 3;
+}
+
+message FriendCount {
+    optional uint32 error = 1;
+    optional uint32 applicationCount = 2;
+    optional uint32 friendCount = 3;
+}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package Rpc.arena;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Arena                       *
+ *                                      *
+ ****************************************/
+
+message pullTournament {
+    message Request {}
+    message Response {
+        Error error = 1;
+        ArenaTournament arenaTournament = 2;
+    }
+}

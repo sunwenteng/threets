@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package View.Player;
+
+import "model/model.hero.proto";
+import "cache/cache.player.proto";
+
+
+// 头像模式：聊天
+message AvatarMode {
+}
+
+// 普通模式：好友、竞技场
+message NormalMode {
+	uint32 accountId = 1;
+    Cache.Player.Basic basic = 2;
+
+    Model.Hero.Avatar avatar = 3;
+    Model.Hero.Suite suite = 4;
+    uint32 attack = 5;
+    uint32 defence = 6;
+}
+

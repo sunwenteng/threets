@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package Api.equip;
+
+import "global.proto";
+
+/****************************************
+ *                                      *
+ *          Equip                       *
+ *                                      *
+ ****************************************/
+
+// 打造装备
+message doCraftTask {
+    message Request {
+        uint32 buildUid = 1;   // 建筑uid
+        uint32 craftID = 2;    // 图纸ID
+    }
+    message Response {
+        Error error = 1;
+        CraftTask craftTask = 2;
+    }
+}
+
+// 完成打造装备
+message finishCraftTask {
+    message Request {
+        uint32 buildUid = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 equipUid = 2;   // 完成的装备uid
+        uint32 buildUid = 3;
+    }
+}
+
+// 升级装备
+message enhanceEquip {
+    message Request {
+        repeated uint32 equipUidArray = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 equipUid = 2;
+    }
+}
+
+// 加速打造装备
+message accelerateCraftTask {
+    message Request {
+        uint32 buildUid = 1;
+    }
+    message Response {
+        Error error = 1;
+        uint32 buildUid = 2;
+    }
+}
+
+// 装备合成
+message combineEquip {
+    message Request {
+        repeated uint32 equipUidArray = 1;  // 被合成的装备uid
+    }
+    message Response {
+        Error error = 1;
+        uint32 combineEquipUid = 2; // 合成的装备uid
+    }
+}
+
+message initCraftTask {
+    message Notify {
+        repeated CraftTask craftTasks = 1;
+    }
+}
+
+message initHandbook {
+    message Notify {
+        repeated uint32 handbook = 1;
+    }
+}
